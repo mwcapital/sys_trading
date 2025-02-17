@@ -33,9 +33,9 @@ st.write(f"**Daily Standard Deviation:** {daily_std}")
 # Kelly Criterion Graph
 st.subheader("Kelly Criterion Visualization")
 kelly_df = functions.kelly(price=price, std=daily_std)
-kelly_df = kelly_df.set_index("Tau")
 # Scatter Plot for Kelly Criterion
-st.line_chart(kelly_df)
+fig = px.scatter(kelly_df, x='Tau', y='Final_Account_Value', title="Tau vs Final Account Value")
+st.plotly_chart(fig, use_container_width=True)
 
 
 
