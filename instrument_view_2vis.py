@@ -26,8 +26,8 @@ else:
 # Plot Price
 st.subheader("Price Chart")
 fig = px.line(price, title="Price Chart")
-st.plotly_chart(fig)
-time.sleep(0.2)
+st.plotly_chart(fig, use_container_width=True)
+
 # Calculate Standard Deviation
 daily_std = price.pct_change().std().values[0] * (252 ** 0.5)
 st.write(f"**Daily Standard Deviation:** {daily_std}")
