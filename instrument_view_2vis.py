@@ -22,16 +22,16 @@ if uploaded_file is not None:
     price = pd.read_excel(xls, sheet_name=sheet_name, header=0, parse_dates=[0], index_col=0)
 else:
     st.stop()
-time.sleep(0.2)
+
 # Plot Price
 st.subheader("Price Chart")
 fig = px.line(price, title="Price Chart")
 st.plotly_chart(fig)
-
+time.sleep(0.2)
 # Calculate Standard Deviation
 daily_std = price.pct_change().std().values[0] * (252 ** 0.5)
 st.write(f"**Daily Standard Deviation:** {daily_std}")
-time.sleep(0.2)
+
 # Kelly Criterion Graph
 st.subheader("Kelly Criterion Visualization")
 kelly_df = functions.kelly(price=price, std=daily_std)
