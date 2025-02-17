@@ -86,11 +86,9 @@ for fast_span, slow_span in filter_pairs:
     st.write(f"**Processing filter pair: Fast={fast_span}, Slow={slow_span}**")
     forecast_scaler, scaled_forecast = functions.forecast(price=price, slow_span=slow_span, fast_span=fast_span)
     capped_forecast = scaled_forecast.clip(-20, 20)
-
-    # Plot Forecast
-    st.markdown(f"Capped Forecast for (Fast={fast_span}, Slow={slow_span})")
-    st.line_chart(capped_forecast)
-
+    st.plotly_chart(px.line(capped_forecast, title=f"Capped Forecast (Fast={fast_span}, Slow={slow_span})"),
+                    use_container_width=True)
+    time.sleep(0.2)
     # Position Calculation
     position, _, _ = functions.risktarget_trendfilterlsforecast(
         price=price, capped_forecast=capped_forecast,
@@ -102,9 +100,8 @@ for fast_span, slow_span in filter_pairs:
                                 key=f'capital_{st.session_state.get("unique_id", 0)}_{np.random.randint(0, 10000)}'),
         instrument_risk=instrument_risk_ewm, weight=1, IDM=1
     )
-    st.markdown(f"Position (Fast={fast_span}, Slow={slow_span})")
-    st.line_chart(position)
-
+    time.sleep(0.2)
+    st.plotly_chart(px.line(position, title=f"Position (Fast={fast_span}, Slow={slow_span})"), use_container_width=True)
 
     # Calculate the strategy results (this function already plots cumulative returns)
     perc_return, stats = functions.strategy_results_trendforecast(
@@ -113,12 +110,11 @@ for fast_span, slow_span in filter_pairs:
                                 key=f'capital_{st.session_state.get("unique_id", 0)}_{np.random.randint(0, 10000)}'),
         position_in_contracts_held=position
     )
-
-    # Capture the existing Matplotlib figure and display it in Streamlit
     result_cumulated = (1 + perc_return).cumprod()
-    st.markdown(f"Portfolio with Filter (Fast={fast_span}, Slow={slow_span}")
-    st.line_chart(result_cumulated)
-
+    time.sleep(0.2)
+    st.plotly_chart(px.line(result_cumulated, title=f"Portfolio with Filter (Fast={fast_span}, Slow={slow_span})"),
+                    use_container_width=True)
+    time.sleep(0.2)
     st.write("**Statistics:**")
     st.write(stats)
 
