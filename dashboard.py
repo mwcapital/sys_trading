@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-
+import plotly.express as px
 # Streamlit Layout
 st.title("Trading Strategy Dashboard")
 
@@ -22,7 +22,8 @@ else:
 
 # Plot Price
 st.subheader("Price Chart")
-st.line_chart(price)
+fig = px.line(price, title="Price Chart")
+st.plotly_chart(fig, use_container_width=True,key="price_chart")
 
 # Calculate Standard Deviation
 daily_std = price.pct_change().std() * (252 ** 0.5)
