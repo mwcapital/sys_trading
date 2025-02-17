@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import plotly.express as px
+import time
 # Streamlit Layout
 st.title("Trading Strategy Dashboard")
 
