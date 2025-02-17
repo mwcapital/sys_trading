@@ -8,7 +8,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.io as pio
 pio.renderers.default = "json"
-
+import time
 
 # Streamlit Layout
 st.title("Trading Strategy Dashboard")
@@ -22,7 +22,7 @@ if uploaded_file is not None:
     price = pd.read_excel(xls, sheet_name=sheet_name, header=0, parse_dates=[0], index_col=0)
 else:
     st.stop()
-
+time.sleep(0.2)
 # Plot Price
 st.subheader("Price Chart")
 fig = px.line(price, title="Price Chart")
@@ -31,7 +31,7 @@ st.plotly_chart(fig)
 # Calculate Standard Deviation
 daily_std = price.pct_change().std().values[0] * (252 ** 0.5)
 st.write(f"**Daily Standard Deviation:** {daily_std}")
-
+time.sleep(0.2)
 # Kelly Criterion Graph
 st.subheader("Kelly Criterion Visualization")
 kelly_df = functions.kelly(price=price, std=daily_std)
@@ -59,6 +59,7 @@ position_hold, minimum_capital_req_hold = functions.position_buyhold(
                             key=f'capital_{st.session_state.get("unique_id", 0)}_{np.random.randint(0, 10000)}'),
     instrument_risk=instrument_risk_ewm, weight=1, IDM=1
 )
+time.sleep(0.2)
 st.plotly_chart(px.line(position_hold, title="Buy and Hold Position"), use_container_width=True)
 
 perc_return, stats = functions.strategy_buyhold(
@@ -96,6 +97,7 @@ for fast_span, slow_span in filter_pairs:
                                 key=f'capital_{st.session_state.get("unique_id", 0)}_{np.random.randint(0, 10000)}'),
         instrument_risk=instrument_risk_ewm, weight=1, IDM=1
     )
+    time.sleep(0.2)
     st.plotly_chart(px.line(position, title=f"Position (Fast={fast_span}, Slow={slow_span})"), use_container_width=True)
 
     # Calculate the strategy results (this function already plots cumulative returns)
@@ -106,6 +108,7 @@ for fast_span, slow_span in filter_pairs:
         position_in_contracts_held=position
     )
     result_cumulated = (1 + perc_return).cumprod()
+    time.sleep(0.2)
     st.plotly_chart(px.line(result_cumulated, title=f"Portfolio with Filter (Fast={fast_span}, Slow={slow_span})"),
                     use_container_width=True)
 
