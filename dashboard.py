@@ -28,11 +28,15 @@ st.line_chart(price)
 daily_std = price.pct_change().std() * (252 ** 0.5)
 st.write(f"**Daily Standard Deviation:** {daily_std}")
 
+
 # Kelly Criterion Graph
 st.subheader("Kelly Criterion Visualization")
-fig, ax = plt.subplots()
-functions.kellygraph(price=price, recent_std=daily_std)
-st.pyplot(fig)
+kelly_df = functions.kelly(price=price, std=daily_std)
+kelly_df = kelly_df.set_index("Tau")
+# Scatter Plot for Kelly Criterion
+st.line_chart(kelly_df)
+
+
 
 # EWM STD Estimate
 st.subheader("Exponential Weighted Moving STD")
