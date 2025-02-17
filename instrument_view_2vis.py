@@ -7,7 +7,7 @@ import plotly.figure_factory as ff
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.io as pio
-pio.renderers.default = "iframe"
+pio.renderers.default = "json"
 
 
 # Streamlit Layout
