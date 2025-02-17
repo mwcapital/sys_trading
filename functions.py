@@ -8,23 +8,20 @@ import math
 import seaborn as sns
 
 
-def kellygraph(price: pd.DataFrame,recent_std: float):
-    values=[]
-    for x in np.arange(0.05, 1.05, 0.01):
-        position_in_contracts= 1 * x / ( price * recent_std)
-        return_price_points = (price-price.shift(1))*position_in_contracts.shift(1)
-        perc_return =  return_price_points / 1
-        account=(1+perc_return).cumprod()
-        values.append((x,account.values[-1]))
-        
-    
+def kelly(price, std):
+    kelly_values = []
 
-    values = pd.DataFrame(values, columns=['x','Final_Account_Value'])
-    plt.figure() 
-    plt.scatter(values['Final_Account_Value'], values['x']),values
-    plt.title("Tau target vs Final Account Value") 
-    plt.show() 
-    return 
+    for tau in np.arange(0, 1.05, 0.05):
+        price = price.squeeze()
+        position_in_contracts = tau / (price * std)
+        return_price_points = price.diff() * position_in_contracts.shift(1)
+        perc_return = return_price_points / 1
+        account = (1 + perc_return).cumprod()
+        kelly_values.append((tau, account.iloc[-1]))
+
+    kelly_df = pd.DataFrame(kelly_values, columns=['Tau', 'Final_Account_Value'])
+    return kelly_df
+
 
 def risktargeting(price: pd.DataFrame, target_tau: float, multiplier: float, capital: float, instrument_risk: pd.Series, weight: float, IDM: float,  contracts: int = 4):
 
